@@ -567,3 +567,13 @@ exports.findUserSuspensionState = function(userId, callback){
         });
     });
 }
+//查询好友余额
+exports.findFriendwealthtByfriendUserId=function(userId,callback){
+    dbUtil.createConnection(function(connection){
+    dbUtil.query(connection,"select bullup_currency_amount from `bullup_wealth` where user_id=?",[userId],function(err,results){
+            if(err)throw err;
+            dbUtil.closeConnection(connection);
+            callback(results[0].bullup_currency_amount);
+        });
+    });
+}

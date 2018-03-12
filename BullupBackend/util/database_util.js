@@ -16,15 +16,22 @@ var socketService = dependencyUtil.global.service.socketService;
 //     useConnectionPooling: true
 // };
 
+// var pool = mysql.createPool({  
+//     host:'127.0.0.1',
+//     user: 'JiaxinYu',
+//     password: 'zxcjoqA139SJC@sjpwQ25W76EIMM,VSXJV33NAskfl%$awdpqi@QWIJD12',
+//     database: 'bullup',
+//     port: 6280  
+// });  
+  
 var pool = mysql.createPool({  
-    host:'127.0.0.1',
-    user: 'JiaxinYu',
-    password: 'zxcjoqA139SJC@sjpwQ25W76EIMM,VSXJV33NAskfl%$awdpqi@QWIJD12',
+    host:'localhost',
+    user: 'root',
+    password: 'Caoxijiang',
     database: 'bullup',
-    port: 6280  
+    port: 3306  
 });  
   
-
 // var serverConnection = mysql.createConnection(mysqlServerConfig);
 // serverConnection.connect(function(err) {
 //     if (err) {

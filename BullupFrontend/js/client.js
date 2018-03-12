@@ -1,5 +1,5 @@
 var io = require('socket.io-client');
-var socket = io.connect('http://bullesport.com:3000');
+var socket = io.connect('http://192.168.1.109:3000');
 //var auto_script = require('./js/auto_program/lol_auto_script');
 var lol_process = require('./js/auto_program/lol_process.js');
 var pubg_crawler = require('./js/pubg_crawler.js');
@@ -251,6 +251,9 @@ socket.on('feedback', function (feedback) {
         case 'GETLASTESTWEALTHRESULT':
             handleGetLastestWealthResult(feedback);
             break; 
+        case'InviterFriendWealth':
+        handInviterFriendWealthresult(feedback);
+        break;
         }
 });
 
@@ -1960,4 +1963,13 @@ function cycleSearch(num,ser){
         },1000*60*3);
     }
     core();
+}
+
+//邀请好友加入房间时对好友积分判断的提示
+function handInviterFriendWealthresult(feedback){
+    if(feedback.errorCode=1){
+     bullup.alert(feedback.text);
+    }else {
+     bullup.alert(feedback.text);
+    }
 }

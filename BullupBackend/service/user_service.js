@@ -353,18 +353,36 @@ exports.handleRegister = function (socket) {
 exports.handleInviteFriend = function (socket) {
     socket.on('message', function (inviteMessage) {
         logUtil.listenerLog('message');
-        if (socketService.isUserOnline(inviteMessage.userId)) {
-            var dstSocket = socketService.mapUserIdToSocket(inviteMessage.userId);
-            inviteMessage.messageToken = 'message' + inviteMessage.userId + (new Date()).getTime();
+        baseInfoDao.findFriendwealthtByfriendUserId(inviteMessage.userId,function(wealth){
+            if(wealth){
+                if(wealth<inviteMessage.team.bet){
+                    socketService.stableSocketEmit(socket,"feedback",{
+                        errorCode:1,
+                        type:"InviterFriendWealth",
+                        text:"好友积分不足，请联系好友充值"
+                    })
+                }else{
+                    if (socketService.isUserOnline(inviteMessage.userId)) {
+                        var dstSocket = socketService.mapUserIdToSocket(inviteMessage.userId);
+                        inviteMessage.messageToken = 'message' + inviteMessage.userId + (new Date()).getTime();
+                        socketService.stableSocketEmit(dstSocket, 'message', inviteMessage);
+                    } else {
+                        socketService.stableSocketEmit(socket, 'feedback', {
+                            errorCode: 1,
+                            type: 'INVITERESULT',
+                            text: '邀请失败,该用户已经下线'
+                        });
+                    }
+                }
+            }else{
+                socketService.stableSocketEmit(socket,"feedback",{
+                    errorCode:2,
+                    type:"InviterFriendWealth",
+                    text:"获取好友积分失败，请联系好友检查积分"
+                })
+            }
 
-            socketService.stableSocketEmit(dstSocket, 'message', inviteMessage);
-        } else {
-            socketService.stableSocketEmit(socket, 'feedback', {
-                errorCode: 1,
-                type: 'INVITERESULT',
-                text: '邀请失败,该用户已经下线'
-            });
-        }
+        })
     });
 }
 
